@@ -6,6 +6,7 @@ class VisualGridHuntGame:
         self.width = width
         self.height = height
         self.agent_pos = [0, 0]
+        self.facing = 'Up'
         self.walls = set(custom_walls) if custom_walls else {(2, 2), (2, 3), (5, 5), (6, 5), (3, 7)}
         
         self.food_positions = set()
@@ -28,14 +29,29 @@ class VisualGridHuntGame:
         self.collision = False
 
     def get_percept(self) -> dict:
+        next_x, next_y = self.agent_pos
+        
+        if self.facing == 'Up': next_y += 1
+        elif self.facing == 'Down': next_y -= 1
+        elif self.facing == 'Left': next_x -= 1
+        elif self.facing == 'Right': next_x += 1
+
+        wall_ahead = (next_x, next_y) in self.walls or next_x < 0 or next_x >= self.width or next_y < 0 or next_y >= self.height
+        food_here = tuple(self.agent_pos) in self.food_positions
+
         return {
-            'agent_pos': list(self.agent_pos),
+            'wall_ahead': wall_ahead,
+            'food_here': food_here,
             'smells_toxin': tuple(self.agent_pos) in self.toxic_traps,
             'score': self.score
         }
 
     def execute_action(self, action: str):
         self.steps += 1
+        
+        if action in ['Up', 'Down', 'Left', 'Right']:
+            self.facing = action
+            
         new_pos = list(self.agent_pos)
         if action == 'Up': new_pos[1] = min(self.height - 1, new_pos[1] + 1)
         elif action == 'Down': new_pos[1] = max(0, new_pos[1] - 1)
@@ -74,7 +90,7 @@ class GridGameGUI:
                 self.canvas.create_rectangle(x1, y1, x1+self.cell_size, y1+self.cell_size, fill=color)
                 if (x, y) in self.env.toxic_traps:
                     self.canvas.create_oval(x1+10, y1+10, x1+30, y1+30, fill="purple")
-
+ 
         ax, ay = self.env.agent_pos
         self.canvas.create_oval(ax*self.cell_size+5, (self.env.height-1-ay)*self.cell_size+5, 
                                 ax*self.cell_size+35, (self.env.height-1-ay)*self.cell_size+35, fill="blue")
