@@ -1,5 +1,6 @@
 import random
 import tkinter as tk
+# kjibhguh
 
 class VisualGridHuntGame:
     def __init__(self, width=10, height=10, num_food=10, num_opponents=2, num_traps=3, custom_walls=None):
