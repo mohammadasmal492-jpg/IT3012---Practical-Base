@@ -1,6 +1,58 @@
 import random
 import tkinter as tk
-# kjibhguh
+
+
+import random
+import tkinter as tk
+
+
+class ModelBasedAgent:
+    def __init__(self):
+        self.visited_cells = set()
+        self.last_action = None
+        self.position = (0, 0)
+
+    def sense_and_act(self, percept):
+
+        
+        self.visited_cells.add(self.position)
+
+        action = None
+
+    
+        if percept['wall_ahead'] and self.position in self.visited_cells:
+            action = "Right"
+
+        
+        elif percept['smells_toxin']:
+            action = "Left"
+
+    
+        elif percept['food_here']:
+            action = "Up"
+
+        
+        else:
+            action = "Up"
+
+        
+        self.last_action = action
+
+        
+        x, y = self.position
+
+        if action == "Up":
+            y += 1
+        elif action == "Down":
+            y -= 1
+        elif action == "Left":
+            x -= 1
+        elif action == "Right":
+            x += 1
+
+        self.position = (x, y)
+
+        return action
 
 class VisualGridHuntGame:
     def __init__(self, width=10, height=10, num_food=10, num_opponents=2, num_traps=3, custom_walls=None):
