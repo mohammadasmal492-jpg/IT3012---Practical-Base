@@ -5,6 +5,18 @@ import tkinter as tk
 import random
 import tkinter as tk
 
+class SimpleReflexAgent:
+
+    def sense_and_act(self, percept):
+
+        if percept['food_here']:
+            return "suck"
+
+        elif percept['wall_ahead']:
+            return "Left"
+
+        else:
+            return "Up"git
 
 class ModelBasedAgent:
     def __init__(self):
