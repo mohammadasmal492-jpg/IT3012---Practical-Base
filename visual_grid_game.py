@@ -7,7 +7,7 @@ import tkinter as tk
 
 class SimpleReflexAgent:
 
-    def sense_and_act(self, percept):
+    def sense_and_act(self, percept)
 
         if percept['food_here']:
             return "suck"
